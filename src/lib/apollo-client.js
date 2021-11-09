@@ -12,7 +12,7 @@ export function getApolloClient() {
 export function _createApolloClient() {
     return new ApolloClient({
         link: new HttpLink({
-            uri: process.env.WORDPRESS_GRAPHQL_ENDPOINT,
+            uri: "https://kryexthemes.com/graphql",
         }),
         cache: new InMemoryCache(),
     });

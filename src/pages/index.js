@@ -3,9 +3,9 @@ import Head from 'next/head';
 import { getApolloClient } from '../lib/apollo-client';
 import { gql } from '@apollo/client';
 
-import Header from './component/Header';
-import Main from './component/Main';
-import Footer from './component/Footer';
+import Header from './components/Header';
+import Main from './components/Main';
+import Footer from './components/Footer';
 
 export default function Home({ page, themes }) {
     const { title, description } = page;

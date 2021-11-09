@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import Typed from 'typed.js';
 
-const Main = () => {
+const Main = ({ themes }) => {
+    console.log(themes);
     const el = useRef(null);
     const typed = useRef(null);
 
@@ -59,7 +60,19 @@ const Main = () => {
                             </Link>
                         </div>
                     </div>
-                    <div className="grid__right"></div>
+                    <div className="grid__right">
+                        <ul className="themes">
+                            {themes &&
+                                themes.length > 0 &&
+                                themes.map((theme) => {
+                                    return (
+                                        <li className="themes__item" key={theme.temalarId}>
+                                            <h2>{theme.title}</h2>
+                                        </li>
+                                    );
+                                })}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </main>

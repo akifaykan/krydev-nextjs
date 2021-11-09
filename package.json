@@ -1,5 +1,5 @@
 {
-  "name": "kry-next",
+  "name": "krydev-nextjs",
   "private": true,
   "scripts": {
     "dev": "next dev",

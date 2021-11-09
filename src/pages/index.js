@@ -10,9 +10,6 @@ import Footer from './components/Footer';
 export default function Home({ page, themes }) {
     const { title, description } = page;
 
-    console.log(page);
-    console.log(themes);
-
     return (
         <>
             <Head>
@@ -24,7 +21,7 @@ export default function Home({ page, themes }) {
             </Head>
             <div className="siteFlex">
                 <Header />
-                <Main />
+                <Main themes={themes} />
                 <Footer />
             </div>
         </>

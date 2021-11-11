@@ -20,11 +20,11 @@ const Header = ({ menus }) => {
                 <nav>
                     <ul className="menus">
                         {menus &&
-                            menus.map((menu) => {
+                            menus.map(({ menuItemId, path, label }) => {
                                 return (
-                                    <li key={menu.menuItemId}>
-                                        <Link href={`${menu.path}`}>
-                                            <a>{menu.label}</a>
+                                    <li key={menuItemId}>
+                                        <Link href={`${path}`}>
+                                            <a>{label}</a>
                                         </Link>
                                     </li>
                                 );

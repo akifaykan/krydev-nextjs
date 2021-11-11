@@ -3,9 +3,8 @@ import { getApolloClient } from '../lib/apollo-client';
 import { gql } from '@apollo/client';
 import Header from './components/Header';
 import Main from './components/Main';
-import Footer from './components/Footer';
 
-export default function Home({ page, menus, themes }) {
+export default function Home({ page, menus, themes, posts }) {
     const { title, description } = page;
 
     return (
@@ -19,7 +18,7 @@ export default function Home({ page, menus, themes }) {
             </Head>
             <div className="siteFlex">
                 <Header menus={menus} />
-                <Main themes={themes} />
+                <Main themes={themes} posts={posts} />
             </div>
         </>
     );
@@ -45,32 +44,35 @@ export async function getStaticProps() {
                         }
                     }
                 }
+                posts {
+                    edges {
+                        node {
+                            title
+                            slug
+                            postId
+                            date
+                            featuredImage {
+                                node {
+                                    sourceUrl
+                                }
+                            }
+                        }
+                    }
+                }
                 allTemalar(first: 10000) {
                     edges {
                         node {
                             temalarId
                             title
                             slug
-                            date
-                            content
                             featuredImage {
                                 node {
                                     sourceUrl
-                                    srcSet
-                                    mediaDetails {
-                                        width
-                                        height
-                                    }
                                 }
                             }
                             Temalar {
                                 demoLink
                                 hot
-                                indirmelinki
-                                teknolojiler
-                                temaIndirimFiyat
-                                temaNormalFiyat
-                                themeDoc
                                 ucretsiz
                                 yeni
                             }
@@ -93,12 +95,21 @@ export async function getStaticProps() {
             };
         });
 
+    const posts = data?.data.posts.edges
+        .map(({ node }) => node)
+        .map((post) => {
+            return {
+                ...post,
+                path: `/blog/${post.slug}`,
+            };
+        });
+
     const themes = data?.data.allTemalar.edges
         .map(({ node }) => node)
         .map((theme) => {
             return {
                 ...theme,
-                path: `/temalar/${theme.slug}`,
+                path: `/tema/${theme.slug}`,
             };
         });
 
@@ -106,7 +117,8 @@ export async function getStaticProps() {
         props: {
             page,
             themes,
-            menus
+            posts,
+            menus,
         },
     };
 }

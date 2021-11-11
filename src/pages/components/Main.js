@@ -2,12 +2,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import Typed from 'typed.js';
-import ReactCarousel from './Carousel.js';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Autoplay, Pagination, EffectCards } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-cards';
 
-const Main = ({ themes }) => {
-    console.log(themes);
+SwiperCore.use([Autoplay, Pagination, EffectCards]);
+
+const Main = ({ themes, posts }) => {
     const el = useRef(null);
     const typed = useRef(null);
+    const swiperRef = useRef(null);
 
     useEffect(() => {
         const options = {
@@ -16,18 +22,29 @@ const Main = ({ themes }) => {
             backSpeed: 40,
             loop: true,
         };
-
         typed.current = new Typed(el.current, options);
-
         return () => {
             typed.current.destroy();
         };
     }, []);
 
+    const mouseOver = () => {
+        swiperRef.current.swiper.autoplay.stop();
+    };
+    const mouseLeave = () => {
+        swiperRef.current.swiper.autoplay.start();
+    };
+    const pagination = {
+        clickable: true,
+        renderBullet: function (index, className) {
+            return '<span class="' + className + ' custom">' + (index + 1) + '</span>';
+        },
+    };
+
     return (
         <main>
-            <div className="grid">
-                <div className="grid__main">
+            <div className="mainHead">
+                <div className="mainHead__main">
                     <div className="workflow">
                         <div className="typ">
                             <span ref={el}></span>
@@ -37,9 +54,9 @@ const Main = ({ themes }) => {
                     <p className="dev">Wordpress Developer</p>
                     <p className="desc">
                         Bir temada, arayüz tasarımı, sitenin estetiği, içerik yönetimi, gezinme,
-                        seo, site hızı gibi çok fazla önemli faktörler vardır. Tüm bu faktörleri göz
-                        önünde bulundurularak temaları kodluyoruz. Temalarımızın sade, kafa
-                        karıştırmayan, basit ve kullanışlı olmasına özen gösteriyoruz.
+                        seo, site hızı gibi önemli faktörler vardır. Tüm bu faktörleri göz önünde
+                        bulundurularak temaları <code>&lt;kodluyoruz&gt;</code> Temalarımızın sade,
+                        kafa karıştırmayan, basit ve kullanışlı olmasına özen gösteriyoruz.
                     </p>
                     <div className="contact">
                         <span>BİZE YAZIN: </span>
@@ -59,30 +76,86 @@ const Main = ({ themes }) => {
                         </Link>
                     </div>
                 </div>
-                <div className="grid__slider">
-                    <ReactCarousel class="slider" options={{ Dots: false,slidesPerPage: 1 }}>
+                <div
+                    className="mainHead__slider"
+                    onMouseOver={() => mouseOver()}
+                    onMouseLeave={() => mouseLeave()}
+                >
+                    <Swiper
+                        spaceBetween={50}
+                        effect={'cards'}
+                        grabCursor={true}
+                        autoplay={{
+                            delay: 2500,
+                            disableOnInteraction: false,
+                        }}
+                        pagination={pagination}
+                        className="mySwiper"
+                        ref={swiperRef}
+                    >
                         {themes &&
                             themes.length > 0 &&
-                            themes.map((theme) => {
-                                const srcNode = theme.featuredImage.node;
+                            themes.map(({ Temalar, featuredImage, path, temalarId, title }) => {
                                 return (
-                                    <div
-                                        key={theme.temalarId}
+                                    <SwiperSlide
+                                        key={temalarId}
                                         className="carousel__slide slider__item"
                                     >
                                         <Image
                                             className="slider__img"
-                                            src={srcNode.sourceUrl}
-                                            height={srcNode.mediaDetails.height}
-                                            width={srcNode.mediaDetails.width}
-                                            alt={theme.title}
+                                            src={featuredImage.node.sourceUrl}
+                                            alt={title}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            objectPosition="center"
                                         />
-                                        <h2>{theme.title}</h2>
-                                    </div>
+                                        <div className="buttons">
+                                            <Link href={Temalar.demoLink}>
+                                                <a className="demo" target="_blank">
+                                                    DEMO
+                                                </a>
+                                            </Link>
+                                            <Link href={path}>
+                                                <a className="permalink" target="_blank">
+                                                    DETAYLAR
+                                                </a>
+                                            </Link>
+                                        </div>
+                                        <h3 className="theme__title">{title}</h3>
+                                    </SwiperSlide>
                                 );
                             })}
-                    </ReactCarousel>
+                    </Swiper>
                 </div>
+            </div>
+            <div className="posts">
+                <h2 className="posts__title">Blog Yazıları</h2>
+                <ul className="posts__list">
+                    {posts &&
+                        posts.length > 0 &&
+                        posts.map(({ date, featuredImage, path, postId, title }) => {
+                            return (
+                                <li className="post__item" key={postId}>
+                                    <Link href={path}>
+                                        <a>
+                                            {featuredImage && (
+                                                <Image
+                                                    className="post__img"
+                                                    src={featuredImage.node.sourceUrl}
+                                                    alt={title}
+                                                    layout="fill"
+                                                    objectFit="cover"
+                                                    objectPosition="center"
+                                                />
+                                            )}
+                                        </a>
+                                    </Link>
+                                    <span className="post__date">{date}</span>
+                                    <h3 className="post__title">{title}</h3>
+                                </li>
+                            );
+                        })}
+                </ul>
             </div>
         </main>
     );

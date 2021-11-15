@@ -116,9 +116,7 @@ const Main = ({ themes, posts }) => {
                                                 </a>
                                             </Link>
                                             <Link href={path}>
-                                                <a className="permalink" target="_blank">
-                                                    DETAYLAR
-                                                </a>
+                                                <a className="permalink">DETAYLAR</a>
                                             </Link>
                                         </div>
                                         <h3 className="theme__title">{title}</h3>
@@ -134,6 +132,13 @@ const Main = ({ themes, posts }) => {
                     {posts &&
                         posts.length > 0 &&
                         posts.map(({ date, featuredImage, path, postId, title }) => {
+                            const dateFormat = new Date(date);
+                            const dateOptions = {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            };
+
                             return (
                                 <li className="post__item" key={postId}>
                                     <Link href={path}>
@@ -150,8 +155,16 @@ const Main = ({ themes, posts }) => {
                                             )}
                                         </a>
                                     </Link>
-                                    <span className="post__date">{date}</span>
-                                    <h3 className="post__title">{title}</h3>
+                                    <div className="post__meta">
+                                        <span className="post__date">
+                                            {dateFormat.toLocaleDateString('tr-TR', dateOptions)}
+                                        </span>
+                                        <h3 className="post__title">
+                                            <Link href={path}>
+                                                <a>{title}</a>
+                                            </Link>
+                                        </h3>
+                                    </div>
                                 </li>
                             );
                         })}

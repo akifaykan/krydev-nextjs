@@ -23,12 +23,17 @@ const Header = ({ menus }) => {
                             menus.map(({ menuItemId, path, label }) => {
                                 return (
                                     <li key={menuItemId}>
-                                        <Link href={`${path}`}>
+                                        <Link href={path}>
                                             <a>{label}</a>
                                         </Link>
                                     </li>
                                 );
                             })}
+                        <li>
+                            <Link href={`/blog`}>
+                                <a>Blog</a>
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
                 <div className="copyright">© 2021, Kryex Themes</div>

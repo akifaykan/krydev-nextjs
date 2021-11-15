@@ -14,12 +14,10 @@ export default function Home({ page, menus, themes, posts }) {
                     {title} &mdash; {description}
                 </title>
                 <meta name="description" content={description} />
-                <link rel="icon" href="/icons/favicon.ico" />
+                <link rel="icon" href="/icons/favicon.png" />
             </Head>
-            <div className="siteFlex">
-                <Header menus={menus} />
-                <Main themes={themes} posts={posts} />
-            </div>
+            <Header menus={menus} />
+            <Main themes={themes} posts={posts} />
         </>
     );
 }
@@ -34,17 +32,16 @@ export async function getStaticProps() {
                     title
                     description
                 }
-                menuItems {
+                menuItems(where: {location: API_MENU}) {
                     edges {
                         node {
-                            locations
-                            label
                             menuItemId
                             path
+                            label
                         }
                     }
                 }
-                posts {
+                posts(first: 3) {
                     edges {
                         node {
                             title
@@ -100,7 +97,7 @@ export async function getStaticProps() {
         .map((post) => {
             return {
                 ...post,
-                path: `/blog/${post.slug}`,
+                path: `/yazi/${post.slug}`,
             };
         });
 

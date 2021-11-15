@@ -1,15 +1,13 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import Image from 'next/image';
 import { gql } from '@apollo/client';
 import { getApolloClient } from '../../lib/apollo-client';
-import styles from './Single.module.css';
+import styles from '../../styles/Single.module.css';
+import Header from '../components/Header';
 
-import React from 'react';
+const singleBlog = ({ site, post, menus }) => {
+    const { content, featuredImage, title } = post;
 
-const singleBlog = ({ site, post }) => {
-    const { content, featuredImage, postId, slug, title } = post;
-    console.log(post);
     return (
         <>
             <Head>
@@ -19,20 +17,20 @@ const singleBlog = ({ site, post }) => {
                 <meta name="description" content={site.description} />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className={styles.post__title}>
-                <Link href="/">
-                    <a>&larr; Anasayfa</a>
-                </Link>
+            <Header menus={menus} />
+            <div className="single post">
                 <h1 className={styles.post__title}>{title}</h1>
-                <Image
-                    className={styles.post__img}
-                    src={featuredImage.node.sourceUrl}
-                    width={featuredImage.node.mediaDetails.width}
-                    height={featuredImage.node.mediaDetails.height}
-                    alt={title}
-                />
+                {featuredImage && (
+                    <Image
+                        className={styles.post__img}
+                        src={featuredImage.node.sourceUrl}
+                        width={featuredImage.node.mediaDetails.width}
+                        height={featuredImage.node.mediaDetails.height}
+                        alt={title}
+                    />
+                )}
                 <div
-                    className="post__content"
+                    className="single__content"
                     dangerouslySetInnerHTML={{
                         __html: content,
                     }}
@@ -41,6 +39,7 @@ const singleBlog = ({ site, post }) => {
         </>
     );
 };
+
 export default singleBlog;
 
 export async function getStaticProps({ params = {} } = {}) {
@@ -55,10 +54,17 @@ export async function getStaticProps({ params = {} } = {}) {
                     title
                     description
                 }
+                menuItems(where: {location: API_MENU}) {
+                    edges {
+                        node {
+                            label
+                            menuItemId
+                            path
+                        }
+                    }
+                }
                 postBy(slug: $slug) {
-                    postId
                     title
-                    slug
                     content
                     featuredImage {
                         node {
@@ -83,10 +89,19 @@ export async function getStaticProps({ params = {} } = {}) {
         ...data?.data.generalSettings,
     };
 
+    const menus = data?.data.menuItems.edges
+        .map(({ node }) => node)
+        .map((menu) => {
+            return {
+                ...menu,
+            };
+        });
+
     return {
         props: {
             site,
             post,
+            menus,
         },
     };
 }
@@ -100,9 +115,7 @@ export async function getStaticPaths() {
                 posts {
                     edges {
                         node {
-                            title
                             slug
-                            postId
                         }
                     }
                 }

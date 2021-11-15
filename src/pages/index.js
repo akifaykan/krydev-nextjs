@@ -97,7 +97,7 @@ export async function getStaticProps() {
         .map((post) => {
             return {
                 ...post,
-                path: `/yazi/${post.slug}`,
+                path: `/post/${post.slug}`,
             };
         });
 

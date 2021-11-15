@@ -23,7 +23,7 @@ const Header = ({ menus }) => {
                             menus.map(({ menuItemId, path, label }) => {
                                 return (
                                     <li key={menuItemId}>
-                                        <Link href={path}>
+                                        <Link href={`/page${path}`}>
                                             <a>{label}</a>
                                         </Link>
                                     </li>

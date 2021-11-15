@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { gql } from '@apollo/client';
-import { getApolloClient } from '../lib/apollo-client';
-import styles from '../styles/Single.module.css';
-import Header from './components/Header';
+import { getApolloClient } from '../../lib/apollo-client';
+import styles from '../../styles/Single.module.css';
+import Header from '../components/Header';
 
 const singlePage = ({ site, page, menus }) => {
     const { content, title } = page;

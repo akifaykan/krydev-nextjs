@@ -8,17 +8,15 @@ export default function Home({ page, menus, themes, posts }) {
     const { title, description } = page;
 
     return (
-        <>
+        <div className="site__grid">
             <Head>
-                <title>
-                    {title} &mdash; {description}
-                </title>
+                <title>{title} &mdash; {description}</title>
                 <meta name="description" content={description} />
                 <link rel="icon" href="/icons/favicon.png" />
             </Head>
             <Header menus={menus} />
             <Main themes={themes} posts={posts} />
-        </>
+        </div>
     );
 }
 
@@ -32,7 +30,7 @@ export async function getStaticProps() {
                     title
                     description
                 }
-                menuItems(where: {location: API_MENU}) {
+                menuItems(where: { location: API_MENU }) {
                     edges {
                         node {
                             menuItemId
@@ -56,10 +54,10 @@ export async function getStaticProps() {
                         }
                     }
                 }
-                allTemalar(first: 10000) {
+                themas(first: 10000) {
                     edges {
                         node {
-                            temalarId
+                            themaId
                             title
                             slug
                             featuredImage {
@@ -101,12 +99,12 @@ export async function getStaticProps() {
             };
         });
 
-    const themes = data?.data.allTemalar.edges
+    const themes = data?.data.themas.edges
         .map(({ node }) => node)
         .map((theme) => {
             return {
                 ...theme,
-                path: `/tema/${theme.slug}`,
+                path: `/theme/${theme.slug}`,
             };
         });
 

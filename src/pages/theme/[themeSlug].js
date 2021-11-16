@@ -5,39 +5,22 @@ import { getApolloClient } from '../../lib/apollo-client';
 import styles from '../../styles/Single.module.css';
 import Header from '../components/Header';
 
-const singleBlog = ({ site, post, menus }) => {
-    const { content, featuredImage, title } = post;
+const singleBlog = ({ site, theme, menus }) => {
+    console.log(theme)
+    console.log(site)
+    console.log(menus)
+    //const { content, featuredImage, title } = theme;
 
     return (
         <>
             <Head>
                 <title>
-                    {title} &mdash; {site.title}
+                    {/* {title} */} &mdash; {site.title}
                 </title>
                 <meta name="description" content={site.description} />
                 <link rel="icon" href="/icons/favicon.png" />
             </Head>
-            <div className={styles.wrapper}>
-                <Header menus={menus} />
-                <div className={styles.article}>
-                    <h1 className={styles.title}>{title}</h1>
-                    {featuredImage && (
-                        <Image
-                            className={styles.img}
-                            src={featuredImage.node.sourceUrl}
-                            width={featuredImage.node.mediaDetails.width}
-                            height={featuredImage.node.mediaDetails.height}
-                            alt={title}
-                        />
-                    )}
-                    <div
-                        className={styles.content}
-                        dangerouslySetInnerHTML={{
-                            __html: content,
-                        }}
-                    ></div>
-                </div>
-            </div>
+            
         </>
     );
 };
@@ -45,7 +28,7 @@ const singleBlog = ({ site, post, menus }) => {
 export default singleBlog;
 
 export async function getStaticProps({ params = {} } = {}) {
-    const { postSlug } = params;
+    const { themeSlug } = params;
 
     const apolloClient = getApolloClient();
 
@@ -65,9 +48,20 @@ export async function getStaticProps({ params = {} } = {}) {
                         }
                     }
                 }
-                postBy(slug: $slug) {
+                themaBy(uri: $slug) {
                     title
                     content
+                    Temalar {
+                        demoLink
+                        indirmelinki
+                        teknolojiler
+                        temaIndirimFiyat
+                        temaNormalFiyat
+                        themeDoc
+                        hot
+                        ucretsiz
+                        yeni
+                    }
                     featuredImage {
                         node {
                             sourceUrl
@@ -81,11 +75,11 @@ export async function getStaticProps({ params = {} } = {}) {
             }
         `,
         variables: {
-            slug: postSlug,
+            slug: themeSlug,
         },
     });
 
-    const post = data?.data.postBy;
+    const theme = data?.data.themaBy;
 
     const site = {
         ...data?.data.generalSettings,
@@ -102,7 +96,7 @@ export async function getStaticProps({ params = {} } = {}) {
     return {
         props: {
             site,
-            post,
+            theme,
             menus,
         },
     };
@@ -114,7 +108,7 @@ export async function getStaticPaths() {
     const data = await apolloClient.query({
         query: gql`
             {
-                posts {
+                themas(first: 10000) {
                     edges {
                         node {
                             slug
@@ -125,13 +119,13 @@ export async function getStaticPaths() {
         `,
     });
 
-    const posts = data?.data.posts.edges.map(({ node }) => node);
+    const themas = data?.data.themas.edges.map(({ node }) => node);
 
     return {
-        paths: posts.map(({ slug }) => {
+        paths: themas.map(({ slug }) => {
             return {
                 params: {
-                    postSlug: slug,
+                    themeSlug: slug,
                 },
             };
         }),

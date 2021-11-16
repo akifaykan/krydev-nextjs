@@ -14,17 +14,19 @@ const singlePage = ({ site, page, menus }) => {
                     {title} &mdash; {site.title}
                 </title>
                 <meta name="description" content={site.description} />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/icons/favicon.png" />
             </Head>
-            <Header menus={menus} />
-            <div className="single page">
-                <h1 className={styles.post__title}>{title}</h1>
-                <div
-                    className="single__content"
-                    dangerouslySetInnerHTML={{
-                        __html: content,
-                    }}
-                ></div>
+            <div className={styles.wrapper}>
+                <Header menus={menus} />
+                <div className={styles.article}>
+                    <h1 className={styles.title}>{title}</h1>
+                    <div
+                        className={styles.content}
+                        dangerouslySetInnerHTML={{
+                            __html: content,
+                        }}
+                    ></div>
+                </div>
             </div>
         </>
     );
@@ -44,7 +46,7 @@ export async function getStaticProps({ params = {} } = {}) {
                     title
                     description
                 }
-                menuItems(where: {location: API_MENU}) {
+                menuItems(where: { location: API_MENU }) {
                     edges {
                         node {
                             label

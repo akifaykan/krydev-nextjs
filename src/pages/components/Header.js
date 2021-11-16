@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const Header = ({ menus }) => {
+    const [openMobile, setOpenMobile] = useState(false);
     return (
         <header>
             <div className="headFlex">
@@ -37,6 +39,14 @@ const Header = ({ menus }) => {
                     </ul>
                 </nav>
                 <div className="copyright">© 2021, Kryex Themes</div>
+            </div>
+            <div
+                className={`mobile__icon ${openMobile ? 'open' : 'close'}`}
+                onClick={() => setOpenMobile(!openMobile)}
+            >
+                <span className="sd1"></span>
+                <span className="sd2"></span>
+                <span className="sd3"></span>
             </div>
         </header>
     );

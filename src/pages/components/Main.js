@@ -95,10 +95,10 @@ const Main = ({ themes, posts }) => {
                     >
                         {themes &&
                             themes.length > 0 &&
-                            themes.map(({ Temalar, featuredImage, path, temalarId, title }) => {
+                            themes.map(({ Temalar, featuredImage, path, themaId, title }) => {
                                 return (
                                     <SwiperSlide
-                                        key={temalarId}
+                                        key={themaId}
                                         className="carousel__slide slider__item"
                                     >
                                         <Image

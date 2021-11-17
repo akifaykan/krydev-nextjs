@@ -75,7 +75,7 @@ export async function getStaticProps({ params = {} } = {}) {
             }
         `,
         variables: {
-            uri: themeSlug,
+            slug: themeSlug,
         },
     });
 

@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## DEMO https://krydev.cf/
+## DEMO https://admiring-elion-2c8460.netlify.app/
 
 ## Getting Started
 
